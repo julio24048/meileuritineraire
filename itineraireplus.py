@@ -9,11 +9,11 @@ import pandas as pd
 df = pd.read_csv("info_communes_parc.csv", sep=";")
 elite = 0.2
 tx_mutations = 0.1
-taille_echantillon = 5000
+taille_echantillon = 500
 trajets = pd.DataFrame({"itineraire":[],"kms":[],"pois":[],"hotel_j3":[],"hotel_j7":[]})
 nb_etapes = 10
 noms_villes = df["insee"].tolist()
-nb_iterations = 3
+nb_iterations = 50
 
 #définition des fonctions
 
@@ -192,21 +192,21 @@ for i in range(2,nb_iterations + 1) :
     notation()
     trajets = trajets.sort_values(by="kms",ascending=True)
     trajets["decile_km"] = 0
-    for i in range(trajets.shape[0]) :
-        trajets.iloc[i,5] = math.floor(i / (taille_echantillon / 10)) + 1
+    for j in range(trajets.shape[0]) :
+        trajets.iloc[j,5] = math.floor(j / (taille_echantillon / 10)) + 1
     trajets = trajets.sort_values(by="pois",ascending=False)
     trajets["decile_poi"] = 0
-    for i in range(trajets.shape[0]) :
-        trajets.iloc[i,6] = math.floor(i / (taille_echantillon / 10)) + 1
+    for k in range(trajets.shape[0]) :
+        trajets.iloc[k,6] = math.floor(k / (taille_echantillon / 10)) + 1
     trajets["decile_cumul"] = 10
-    for i in range(trajets.shape[0]) :
-        for j in range(1,10) :
-            if trajets.iloc[i,5] == j and trajets.iloc[i,6] == j :
-                trajets.iloc[i,7] = j
+    for l in range(trajets.shape[0]) :
+        for m in range(1,10) :
+            if trajets.iloc[l,5] == m and trajets.iloc[l,6] == m :
+                trajets.iloc[l,7] = m
     trajets = trajets.sort_values(by=["decile_cumul","pois","kms"],ascending=[True,False,True])
     # dans l'itération seules les caractéristiques sont affichées sauf à la dernière ou on a le détail du trajet
     if i == nb_iterations :
-        print ("trajet retenu :" + 
+        print ("trajet retenu - " + 
                str(round(trajets[(trajets["hotel_j3"]> 0) & (trajets["hotel_j7"]> 0)].iloc[0,1],1)) + " kms" +
                " - " + str(trajets[(trajets["hotel_j3"]> 0) & (trajets["hotel_j7"]> 0)].iloc[0,2]) + " pois :"
         )
