@@ -12,7 +12,7 @@ taille_echantillon = 1500
 trajets = pd.DataFrame({"itineraire":[],"kms":[],"pois":[],"hotel_j3":[],"hotel_j7":[]})
 nb_etapes = 10
 noms_villes = df["insee"].tolist()
-nb_iterations = 100
+nb_iterations = 200
 
 #définition des fonctions
 
